@@ -15,7 +15,7 @@ import { useCookie, withCookie } from "next-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default withCookie(function login({ cookie, API_URL }) {
+export default withCookie(function Login({ cookie, API_URL }) {
   const [clicked, setCliked] = useState({ login: false });
 
   const router = useRouter();
@@ -142,8 +142,7 @@ export default withCookie(function login({ cookie, API_URL }) {
 });
 
 export const getServerSideProps = async (ctx) => {
-  const cookie = useCookie(ctx);
-  const token = cookie.get("auth.token");
+  const token = ctx.req.cookies["auth.token"];
 
   if (token) {
     ctx.res.writeHead(301, {

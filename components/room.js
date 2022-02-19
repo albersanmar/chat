@@ -10,7 +10,7 @@ import { blue } from "@mui/material/colors";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-export default function room({ user, messages, roomId }) {
+export default function Room({ user, messages, roomId }) {
   const router = useRouter();
 
   const goTo = () => {

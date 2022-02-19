@@ -34,7 +34,7 @@ const styleOwner = {
   color: "white",
 };
 
-export default function chat({ API_URL, auth, room, user, messages }) {
+export default function Chat({ API_URL, auth, room, user, messages }) {
   const router = useRouter();
 
   const [roomId, setRoomId] = useState(room || null);
@@ -226,7 +226,6 @@ export default function chat({ API_URL, auth, room, user, messages }) {
             sx={{ borderRadius: 100 }}
             size="small"
             onClick={send}
-            size="small"
             disabled={text === "" || clicked.send}
           >
             <Send />

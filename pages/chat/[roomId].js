@@ -4,7 +4,7 @@ import axios from "axios";
 
 import Chat from "../../components/chat";
 
-export default withCookie(function chat({
+export default withCookie(function ChatPage({
   API_URL,
   user,
   auth,
@@ -26,8 +26,7 @@ export default withCookie(function chat({
 
 export const getServerSideProps = async (ctx) => {
   const roomId = ctx.query.roomId;
-  const cookie = useCookie(ctx);
-  const token = cookie.get("auth.token");
+  const token = ctx.req.cookies["auth.token"];
 
   if (!token) {
     ctx.res.writeHead(301, {

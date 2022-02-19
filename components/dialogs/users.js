@@ -15,7 +15,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function users({ users, open, handleClose }) {
+export default function Users({ users, open, handleClose }) {
   const [openDialog, setOpenDialog] = useState(open);
   const [dataUsers, setDataUsers] = useState(users);
 

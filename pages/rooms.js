@@ -41,7 +41,7 @@ const sort = (a, b) => {
   else return 0;
 };
 
-export default withCookie(function rooms({
+export default withCookie(function Rooms({
   cookie,
   token,
   API_URL,
@@ -187,8 +187,7 @@ export default withCookie(function rooms({
 });
 
 export const getServerSideProps = async (ctx) => {
-  const cookie = useCookie(ctx);
-  const token = cookie.get("auth.token");
+  const token = ctx.req.cookies["auth.token"];
   if (!token) {
     ctx.res.writeHead(301, {
       Location: "/login",

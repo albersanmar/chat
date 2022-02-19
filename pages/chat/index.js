@@ -4,7 +4,7 @@ import axios from "axios";
 
 import Chat from "../../components/chat";
 
-export default withCookie(function chat({ API_URL, user, auth }) {
+export default withCookie(function ChatPage({ API_URL, user, auth }) {
   return (
     <div>
       <Chat API_URL={API_URL} auth={auth} user={user} />
@@ -14,8 +14,7 @@ export default withCookie(function chat({ API_URL, user, auth }) {
 
 export const getServerSideProps = async (ctx) => {
   const userId = ctx.query.userId;
-  const cookie = useCookie(ctx);
-  const token = cookie.get("auth.token");
+  const token = ctx.req.cookies["auth.token"];
 
   if (!token) {
     ctx.res.writeHead(301, {
