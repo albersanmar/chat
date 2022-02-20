@@ -95,6 +95,7 @@ export default withCookie(function Rooms({
           user: userRoom.user,
           messages: room.messages,
           roomId: room.id,
+          date: message.createdAt,
         });
         setDataRooms(rs.slice().sort(sort));
       }
