@@ -35,13 +35,13 @@ export default withCookie(function Home() {
 });
 
 export const getServerSideProps = async (ctx) => {
-  const token = ctx.req.cookies["auth.token"];
+  /*const token = ctx.req.cookies["auth.token"];
 
-  if (token) {
+  if (token) {*/
     ctx.res.writeHead(301, {
-      Location: "/rooms",
+      Location: "/login",
     });
     ctx.res.end();
-  }
+  // }
   return { props: { API_URL: process.env.API_URL } };
 };

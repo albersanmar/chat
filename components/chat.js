@@ -34,7 +34,7 @@ const styleOwner = {
   color: "white",
 };
 
-export default function Chat({ API_URL, auth, room, user, messages }) {
+export default function Chat({ API_URL, auth, room, user, messages, users }) {
   const router = useRouter();
 
   const [roomId, setRoomId] = useState(room || null);
@@ -94,12 +94,12 @@ export default function Chat({ API_URL, auth, room, user, messages }) {
     const s = io(API_URL);
     s.emit("join", {
       room: roomId,
-      users: [auth.user.id, user.id],
+      users: users,
     });
     s.on("receiveMessage", (data) => {
       const message = data;
       if (message.userId !== auth.user.id) {
-        const exist = messages.find((m) => m.id === message.id);
+        const exist = dataMessages.find((m) => m.id === message.id);
         if (!exist) {
           let msgs = dataMessages.slice();
           msgs.push({ id: message.id, text: message.text, owner: false });
@@ -116,16 +116,16 @@ export default function Chat({ API_URL, auth, room, user, messages }) {
     try {
       let response,
         room_id = roomId;
-      if (!roomId) {
+      /*if (!roomId) {
         response = await axios.post(`${API_URL}api/v1/rooms`, {
           users: [user.id, auth.user.id],
         });
         setRoomId(response.data.data.room.id);
         room_id = response.data.data.room.id;
-      }
+      }*/
       response = await axios.post(`${API_URL}api/v1/messages`, {
         userId: auth.user.id,
-        roomId: room_id,
+        // roomId: room_id,
         text: text,
       });
       const message = response.data.data.message;
@@ -134,8 +134,8 @@ export default function Chat({ API_URL, auth, room, user, messages }) {
       setMessages(msgs.slice());
       socket.emit("sendMessage", {
         message: message,
-        room: roomId,
-        users: [auth.user.id, user.id],
+        //room: roomId,
+        users: users,
       });
       setText("");
       setSendMessage(true);
@@ -150,7 +150,7 @@ export default function Chat({ API_URL, auth, room, user, messages }) {
     <div>
       <AppBar sx={{ position: "fixed" }}>
         <Toolbar>
-          <IconButton
+          {/*<IconButton
             edge="start"
             color="inherit"
             aria-label="close"
@@ -158,7 +158,7 @@ export default function Chat({ API_URL, auth, room, user, messages }) {
             onClick={() => router.back()}
           >
             <ArrowBackIos />
-          </IconButton>
+          </IconButton>*/}
           <Avatar
             sx={{ bgcolor: blue[500] }}
             style={{ marginRight: 5, marginLeft: 5 }}

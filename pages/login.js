@@ -41,8 +41,7 @@ export default withCookie(function Login({ cookie, API_URL }) {
   const TextFieldEmail = ({ field, form, ...props }) => {
     return (
       <TextField
-        label="Email"
-        type="email"
+        label="Username"
         variant="outlined"
         margin="normal"
         {...field}
@@ -66,16 +65,27 @@ export default withCookie(function Login({ cookie, API_URL }) {
 
   const login = async ({ email, password }) => {
     setCliked({ register: true });
+    let response;
     try {
-      let response = await axios.post(`${API_URL}api/v1/auth/login`, {
-        email: email.replace(" ", ""),
+      response = await axios.post(`${API_URL}api/v1/auth/login`, {
+        name: email,
         password: password,
       });
       cookie.set("auth.token", response.data.data.token);
-      router.push("/rooms");
+      router.push("/chat");
     } catch (error) {
-      console.log(error);
-      toast.error("Ha ocurrido un error, no fue posible registrar al usuario");
+      console.log(JSON.parse(JSON.stringify(error)));
+      // toast.error("Ha ocurrido un error, no fue posible registrar al usuario");
+      await axios.post(`${API_URL}api/v1/auth/register`, {
+        name: email,
+        password: password,
+      });
+      response = await axios.post(`${API_URL}api/v1/auth/login`, {
+        name: email,
+        password: password,
+      });
+      cookie.set("auth.token", response.data.data.token);
+      router.push("/chat");
     }
     setCliked({ register: false });
   };
@@ -85,7 +95,7 @@ export default withCookie(function Login({ cookie, API_URL }) {
     <Formik
       initialValues={{
         email: "",
-        password: "",
+        password: "password",
       }}
       onSubmit={(values) => {
         login(values);
@@ -105,20 +115,20 @@ export default withCookie(function Login({ cookie, API_URL }) {
           >
             <Field
               name="email"
-              validate={validateEmail}
+              validate={validateRequired}
               component={TextFieldEmail}
             />
             {errors.email && touched.email && (
               <div style={{ color: "red" }}>{errors.email}</div>
             )}
-            <Field
+            {/*<Field
               name="password"
               validate={validateRequired}
               component={TextFieldPassword}
             />
             {errors.password && touched.password && (
               <div style={{ color: "red" }}>{errors.password}</div>
-            )}
+            )}*/}
             <div style={{ margin: 20 }}>
               <LoadingButton
                 type="submit"
@@ -142,13 +152,13 @@ export default withCookie(function Login({ cookie, API_URL }) {
 });
 
 export const getServerSideProps = async (ctx) => {
-  const token = ctx.req.cookies["auth.token"];
+  /*const token = ctx.req.cookies["auth.token"];
 
   if (token) {
     ctx.res.writeHead(301, {
       Location: "/rooms",
     });
     ctx.res.end();
-  }
+  }*/
   return { props: { API_URL: process.env.API_URL } };
 };
